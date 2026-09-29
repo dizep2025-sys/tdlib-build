@@ -1,0 +1,25 @@
+name: Build TDLib
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Download TDLib sources
+        uses: actions/checkout@v4
+        with:
+          repository: tdlib/td
+          path: td
+
+      - name: Build TDLib for Android
+        working-directory: td/example/android
+        run: docker build --output tdlib .
+
+      - name: Save result
+        uses: actions/upload-artifact@v4
+        with:
+          name: tdlib-android
+          path: td/example/android/tdlib
